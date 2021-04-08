@@ -59,12 +59,12 @@ public class Email {
 		int cont=-1;
 		
 		
-		String Va[]=Quincena.getText().split("-");
-		String Or= Va[0].toString().trim();
-		String numero=Or.replace("Corte ", "").replace("_", "");//QUINCENA 1 O QUINCENA 2
-		String va2[]=Va[1].trim().split(" ");
-		String Mes=va2[0].toString().trim();//MES
-		String Anio=va2[1].toString().trim();//AÑO
+		String Validar[]=Quincena.getText().split("-");
+		String Corter= Validar[0].toString().trim();
+		String numero=Corter.replace("Corte ", "").replace("_", "");//QUINCENA 1 O QUINCENA 2
+		String fecha[]=Validar[1].trim().split(" ");
+		String Mes=fecha[0].toString().trim();//MES
+		String Anio=fecha[1].toString().trim();//AÑO
 		System.out.println(Mes+" "+Anio);
 		
 		
@@ -76,7 +76,7 @@ public class Email {
 		String DatosEmail="SELECT * FROM [Libranza].[dbo].[Correo_Remitente]";
 		DefaultTableModel resultado;
 		resultado = base.ConsultarQuery(DatosEmail);
-		String Nombre=resultado.getValueAt(0, 0).toString();
+		String Nombre=resultado.getValueAt(0, 0).toString().trim();
 		String correoRemitente = resultado.getValueAt(0, 1).toString().trim();
 		String claveCorreoRemitente = resultado.getValueAt(0, 2).toString().trim();
 		String CorreoMascara= resultado.getValueAt(0, 3).toString().trim();
@@ -175,7 +175,8 @@ public class Email {
 					adjunto.setDataHandler(new DataHandler(new FileDataSource(direccion+"\\"+Regional+"\\Encriptado\\"+Convenio+".xls")));//direccion del archivo a adjuntar
 					double numEntero = Double.parseDouble(Convenio);
 					long numeroConvenio=Math.round(numEntero);
-					adjunto.setFileName(numeroConvenio+".xls");//nombre con el cual se envia el archivo
+					//adjunto.setFileName(numeroConvenio+".xls");//nombre con el cual se envia el archivo
+					adjunto.setFileName(Convenio+".xls");//nombre con el cual se envia el archivo
 					
 					File file = new File(direccion+"\\"+Regional+"\\Encriptado\\"+Convenio+".xls");
 					
@@ -187,9 +188,9 @@ public class Email {
 					Multipart.addBodyPart(adjunto);
 					
 					MimeMessage message = new MimeMessage(session);// envia la sesion
+					message.setFrom(new InternetAddress(CorreoMascara));// cuenta que va a enviar el correo
 						for(int z=0;z<correoDes.length;z++){			
-							message.setFrom(new InternetAddress(CorreoMascara));// cuenta que va a enviar el correo
-							//message.setFrom(new InternetAddress(correoRemitente));// cuenta que va a enviar el correo
+							//message.setFrom(new InternetAddress(CorreoMascara));// cuenta que va a enviar el correo
 							message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDes[z]));// receptor principal sin copia
 						}
 					message.setContent(Multipart);// envia mensaje, CON CODIFICACION A ESPAÑOL
@@ -204,7 +205,7 @@ public class Email {
 							LabelPorcentaje.setText("Porcentaje : "+Porcentaje + "% " + " Van "	+ n + " Mensaje(s) Enviado(s)"+ " de " + cantiidad);
 							PanelPorcentaje.update(PanelPorcentaje.getGraphics());
 							cont++;
-							if(cont>99){cont=99;}
+							if(cont>=99){cont=99;}
 						}
 					if (n==cantiidad){//indica cuando los mensajes fueron enviados
 						t.close();// cierra el correo

@@ -3,12 +3,15 @@
  */
 package CargaDatos;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,10 +29,32 @@ public class conexionBD {
 	public static Connection conectar() {
 
 		try {
+			Properties propiedad=new Properties();
+			InputStream entrada =null;
+			
+			entrada =new FileInputStream("Properties//datos.properties");
+			propiedad.load(entrada);
+			
+			String Server=propiedad.getProperty("IPBD").trim();
+			String Puerto=propiedad.getProperty("PuertoBD").trim();
+			String DataBaseName=propiedad.getProperty("BaseDatos").trim();
+			String Login=propiedad.getProperty("UsuarioBD").trim();
+			String Clave=propiedad.getProperty("ClaveBD").trim();
+			//System.out.println(Server+"-"+DataBaseName+"-"+Login+"-"+Clave);
+			String url=String.format("jdbc:sqlserver://%s\\%s;databaseName=%s;user=%s;password=%s;",Server,Puerto,DataBaseName,Login,Clave);
+			
+			
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			// cn = DriverManager.getConnection("jdbc:sqlserver://172.29.88.99;DatabaseName=Libranza","sa","HDI@123");// con direccion ip
+			//cn = DriverManager.getConnection("jdbc:sqlserver://localhost;DatabaseName=Certificado029","sa","HDI@123");// de forma local
+			if(cn==null || cn.isClosed()) {
+				cn = DriverManager.getConnection(url);
+			}
+			
+			/*Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			//cn = DriverManager.getConnection("jdbc:sqlserver://192.168.0.23;DatabaseName=Libranza","sa","HDI@123*");// con direccion ip 
 			cn = DriverManager.getConnection("jdbc:sqlserver://localhost;DatabaseName=Libranza", "sa","HDI@123*");//de forma local
-
+			 */
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}

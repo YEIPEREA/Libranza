@@ -315,6 +315,7 @@ public class MENÚ extends JFrame {
 
 			String Cobrconv = result.getValueAt(0, 1).toString();
 			String Cagmaest = result.getValueAt(1, 1).toString();
+			String Fecha = result.getValueAt(1, 2).toString();
 			String Desvinculado = result.getValueAt(2, 1).toString();
 			String Parametrizacion = result.getValueAt(3, 1).toString();
 			if (Cobrconv.contains("true") == true) {
@@ -324,8 +325,12 @@ public class MENÚ extends JFrame {
 			}
 			if (Cagmaest.contains("true") == true) {
 				chckbxCagmaest.setSelected(true);
+				labelFecha.setText(Fecha);
+				panelFecha.update(panelFecha.getGraphics());
 			} else {
 				chckbxCagmaest.setSelected(false);
+				labelFecha.setText("");
+				panelFecha.update(panelFecha.getGraphics());
 			}
 			if (Desvinculado.contains("true") == true) {
 				checkbxDesvinculado.setSelected(true);
@@ -415,75 +420,9 @@ public class MENÚ extends JFrame {
 					resutado2 = txtCusersingYeisonPdesktopquincena.getText().contains(".txt");
 					resutado3 = txtCusersingYeisonPdesktopquincena.getText().contains(".csv");
 					if (resutado == true && (resutado2 == true || resutado3 == true)) {
-						String ValidarFecha[] = txtCusersingYeisonPdesktopquincena.getText().split("\\\\");
-						int contar = ValidarFecha.length;
-						String Obtener = ValidarFecha[(contar - 1)].toString().trim();
-						String ObtenerFecha = Obtener.replace("cagmaest", "").replace("_", "");
-						int cantidad = ObtenerFecha.length();
-						int Mes = Integer.parseInt(ObtenerFecha.substring(0, 2));
-						String Dia = ObtenerFecha.substring(2, 4);
-						String Año = ObtenerFecha.substring(4, 8);
-						int numDia = Integer.parseInt(Dia);
-						String Meses = "";
-						String Quince = "";
-
-						if (numDia <= 15) {
-							Quince = "Corte 2 - ";
-						} else {
-							Quince = "Corte 1 - ";
-							Mes = Mes + 1;
-							if (Mes > 12) {
-								Mes = 1;
-							}
-						}
-
-						switch (Mes) {
-						case 1:
-							Meses = "Enero";
-							break;
-						case 2:
-							Meses = "Febrero";
-							break;
-						case 3:
-							Meses = "Marzo";
-							break;
-						case 4:
-							Meses = "Abril";
-							break;
-						case 5:
-							Meses = "Mayo";
-							break;
-						case 6:
-							Meses = "Junio";
-							break;
-						case 7:
-							Meses = "Julio";
-							break;
-						case 8:
-							Meses = "Agosto";
-							break;
-						case 9:
-							Meses = "Septiembre";
-							break;
-						case 10:
-							Meses = "Octubre";
-							break;
-						case 11:
-							Meses = "Noviembre";
-							break;
-						case 12:
-							Meses = "Diciembre";
-							break;
-						default:
-							break;
-						}
-
-//String fecha=Quince+Dia+" "+Meses+" "+Año;
-						String fecha = Quince + Meses + " " + Año;
-						labelFecha.setText(fecha);
-						panelFecha.update(panelFecha.getGraphics());
-
-						function.leerTxtCagmaest(txtCusersingYeisonPdesktopquincena.getText(),panelPorcentaje, labelPorcentaje, chckbxCagmaest,JpCag);
+						String fecha=quincena();
+						function.leerTxtCagmaest(txtCusersingYeisonPdesktopquincena.getText(), panelPorcentaje,
+								labelPorcentaje, chckbxCagmaest, JpCag,fecha);
 					} else {
 						chckbxCagmaest.setSelected(false);
 						JpCobr.update(JpCobr.getGraphics());// para actualizar el panel y poder mostrar el proceso
@@ -839,5 +778,76 @@ public class MENÚ extends JFrame {
 			}
 		}); // cierre del combobox
 // ===============================================================================================
+	}
+
+	public String quincena() {
+			String ValidarFecha[] = txtCusersingYeisonPdesktopquincena.getText().split("\\\\");
+			int contar = ValidarFecha.length;
+			String Obtener = ValidarFecha[(contar - 1)].toString().trim();
+			String ObtenerFecha = Obtener.replace("cagmaest", "").replace("_", "");
+			int cantidad = ObtenerFecha.length();
+			int Mes = Integer.parseInt(ObtenerFecha.substring(0, 2));
+			String Dia = ObtenerFecha.substring(2, 4);
+			String Año = ObtenerFecha.substring(4, 8);
+			int numDia = Integer.parseInt(Dia);
+			String Meses = "";
+			String Quince = "";
+
+			if (numDia <= 15) {
+				Quince = "Corte 2 - ";
+			} else {
+				Quince = "Corte 1 - ";
+				Mes = Mes + 1;
+				if (Mes > 12) {
+					Mes = 1;
+				}
+			}
+
+			switch (Mes) {
+			case 1:
+				Meses = "Enero";
+				break;
+			case 2:
+				Meses = "Febrero";
+				break;
+			case 3:
+				Meses = "Marzo";
+				break;
+			case 4:
+				Meses = "Abril";
+				break;
+			case 5:
+				Meses = "Mayo";
+				break;
+			case 6:
+				Meses = "Junio";
+				break;
+			case 7:
+				Meses = "Julio";
+				break;
+			case 8:
+				Meses = "Agosto";
+				break;
+			case 9:
+				Meses = "Septiembre";
+				break;
+			case 10:
+				Meses = "Octubre";
+				break;
+			case 11:
+				Meses = "Noviembre";
+				break;
+			case 12:
+				Meses = "Diciembre";
+				break;
+			default:
+				break;
+			}
+
+//String fecha=Quince+Dia+" "+Meses+" "+Año;
+			String fecha = Quince + Meses + " " + Año;
+			labelFecha.setText(fecha);
+			panelFecha.update(panelFecha.getGraphics());
+			return fecha;
 	}
 }

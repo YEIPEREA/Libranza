@@ -213,7 +213,7 @@ public class cargaTXR {
  * @param CheckCagmaest  Valida si el archivo fue cargado de una forma correcta
  * @param JpCag para actualizar el panel y poder mostrar el proceso
  */
-	public void leerTxtCagmaest(String direccion, JPanel PanelPorcentaje,JLabel LabelPorcentaje, JCheckBox CheckCagmaest, JPanel JpCag) {
+	public void leerTxtCagmaest(String direccion, JPanel PanelPorcentaje,JLabel LabelPorcentaje, JCheckBox CheckCagmaest, JPanel JpCag,String fecha) {
 		int contador = 0;
 		String linea;
 		String ITEM[];
@@ -226,7 +226,7 @@ public class cargaTXR {
 		if (resutado == true && resutado2 == true) {
 			try {
 				Proceso lectxtcag = new Proceso();
-				base.EjecutarQuery("update LibrosSubidos set Estado=0 where Libros='Cagmaest'");
+				base.EjecutarQuery("update LibrosSubidos set Estado=0,Corte='' where Libros='Cagmaest'");
 				CheckCagmaest.setSelected(false);
 				JpCag.update(JpCag.getGraphics());// para actualizar el panel y poder mostrar el proceso
 
@@ -255,7 +255,7 @@ public class cargaTXR {
 						if (contador == cantidadLineas) {
 							CheckCagmaest.setSelected(true);
 							JpCag.update(JpCag.getGraphics());// para actualizar el panel y poder mostrar el proceso
-							base.EjecutarQuery("update LibrosSubidos set Estado=1 where Libros='Cagmaest'");
+							base.EjecutarQuery("update LibrosSubidos set Estado=1,Corte='"+fecha+"' where Libros='Cagmaest'");
 						}
 					}
 					lectxtcag.ProcesoCagmaest(linea, base, contador);
